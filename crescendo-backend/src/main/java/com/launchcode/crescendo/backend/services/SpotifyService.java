@@ -1,20 +1,32 @@
-package com.launchcode.crescendo.backend.controllers;
+package com.launchcode.crescendo.backend.services;
+
+import com.launchcode.crescendo.backend.models.SpotifySearchResponse;
+import com.launchcode.crescendo.backend.models.SpotifyTokenResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Base64;
+import java.util.Map;
+
 @Service
 public class SpotifyService {
-    @Value("${spotify.clientId")
+
+    @Value("${spotify.clientId}")
     private String clientId;
 
-    @Value("${spotify.clientSecret")
+    @Value("${spotify.clientSecret}")
     private String clientSecret;
 
     @Value("${spotify.apiBaseUrl}")
     private String apiBaseUrl;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    public SpotifyService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public SpotifyTokenResponse authenticate() {
         String authUrl = "https://accounts.spotify.com/api/token";
@@ -37,4 +49,17 @@ public class SpotifyService {
         return response.getBody();
     }
 
+    public String getTrackUrl(String spotifyTrackId) {
+        String trackInfoUrl = apiBaseUrl + "/v1/tracks/" + spotifyTrackId;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        ResponseEntity<Map> response = restTemplate.exchange(trackInfoUrl, HttpMethod.GET, entity, Map.class);
+        if (response.getStatusCode().is2xxSuccessful()) {
+            Map<String, Object> trackInfo = response.getBody();
+            return (String) trackInfo.get("preview_url");
+        } else {
+            return null;
+        }
+    }
 }
