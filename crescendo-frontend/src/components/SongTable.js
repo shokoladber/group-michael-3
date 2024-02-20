@@ -54,6 +54,16 @@ const SongTable = () => {
     return `https://open.spotify.com/track/${trackId}`;
   };
 
+  const copyUrlToClipboard = async (url) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      alert('URL copied to clipboard successfully!');
+    } catch (error) {
+      console.error('Error copying URL to clipboard:', error);
+      alert('Failed to copy URL to clipboard');
+    }
+  };
+
   return (
     <div className="containerFor">
       <h2 className="text-center">Your Music Repertoire</h2>
@@ -82,7 +92,8 @@ const SongTable = () => {
               <th>Title</th>
               <th>Musician/Show</th>
               <th>Notes</th>
-              <th>Listen on Spotify</th> {/* Added a new column for Spotify link */}
+              <th>Listen on Spotify</th>
+              <th>Share</th> {/* Added a new column for sharing */}
             </tr>
           </thead>
           <tbody>
@@ -92,7 +103,22 @@ const SongTable = () => {
                 <td>{song.musician}</td>
                 <td>{song.notes}</td>
                 <td>
-                  {song.spotifyTrackId && <a href={getSpotifyLink(song.spotifyTrackId)} target="_blank" rel="noopener noreferrer">Listen</a>}
+  {song.spotifyTrackId && (
+    <>
+      <p>Spotify Track ID:{song.spotifyTrackId}</p>
+      <p>Generated Spotify Link: {getSpotifyLink(song.spotifyTrackId)}</p>
+      <a
+        href={getSpotifyLink(song.spotifyTrackId)}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Listen
+      </a>
+    </>
+  )}
+</td>
+                <td>
+                  <button onClick={() => copyUrlToClipboard(`http://localhost:8080/api/songs/${song.id}`)}>Copy URL</button>
                 </td>
               </tr>
             ))}

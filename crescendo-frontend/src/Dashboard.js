@@ -27,7 +27,7 @@ function Dashboard() {
             <button onClick={navigateToEditLibrary} className="edit-button">Edit Library</button>
             <p className='message'>{message}</p>
             {/* Render the SongTable component */}
-            <SongTable />
+            <SongTable/>
         </div>
     );
 };
