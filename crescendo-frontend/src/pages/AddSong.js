@@ -10,11 +10,11 @@ const AddSong = () => {
     const [query, setQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [message, setMessage] = useState('');
+    const [uploadedImage, setUploadedImage] = useState(null); // Holds the URL of the uploaded image
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            // Submit form data including the file
             const formData = new FormData();
             formData.append('title', song.title);
             formData.append('musician', song.musician);
@@ -32,8 +32,8 @@ const AddSong = () => {
 
             if (response.ok) {
                 setMessage('New Song Added');
-                navigate('/Dashboard'); // Navigate to the list of songs page
-                setSong({ title: '', musician: '', notes: '', spotifyTrackId:'' }); // Clear the form fields after successful addition
+                navigate('/Dashboard');
+                setSong({ title: '', musician: '', notes: '', spotifyTrackId:'' });
             } else {
                 setMessage('Failed to add song');
             }
@@ -42,27 +42,33 @@ const AddSong = () => {
             setMessage('Failed to add song');
         }
     };
+
     const handleFileChange = (event) => {
-        setSong({ ...song, file: event.target.files[0] });
+        const file = event.target.files[0];
+        setSong({ ...song, file }); // Stores the uploaded file
+
+        // Create a URL for the uploaded image to display a preview for the user
+        const imageUrl = URL.createObjectURL(file);
+        setUploadedImage(imageUrl);
     };
 
     const handleSearch = async (searchTerm) => {
         try {
-            const accessToken = 'BQBfs-Go2pIWQvdm-be5Uk-0cknL3W5jA8WUcquPX33MgWG8NSHMaNsRQqDpwXYQIj0BMCIw478tuWOkP5FOzMqbVaXm02klPdjDJzreGRHxgew0_VFPOWsL1KBhhkdzkDlW1nh1ITVJaypt3DEIMO5N3e_mogVbpTvE5JOxO9Dxyy0qDc50mSiKvXh0TIOF6eIct6AaNUY-Ch295HmJixXk0FCP13USzS5nJ40GNrDhhVjn-yifrkrGEw';
-            const encodedSearchTerm = encodeURIComponent(searchTerm); // Encode the search term
+            const accessToken = 'YOUR_ACCESS_TOKEN';
+            const encodedSearchTerm = encodeURIComponent(searchTerm);
             const response = await axios.get('https://api.spotify.com/v1/search', {
                 params: {
-                    q: encodedSearchTerm, // Use the encoded search term
+                    q: encodedSearchTerm,
                     type: 'track'
                 },
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
             });
-    
+
             const searchResults = response.data.tracks.items.map(item => ({
                 id: item.id,
-                name: `${item.name} - ${item.artists.map(artist => artist.name).join(', ')}`, // Concatenate track name and artists
+                name: `${item.name} - ${item.artists.map(artist => artist.name).join(', ')}`,
                 spotifyTrackId: item.id
             }));
 
@@ -114,13 +120,14 @@ const AddSong = () => {
                             onChange={handleFileChange}
                             required
                         />
+                        {uploadedImage && <img src={uploadedImage} alt="Uploaded file" />} {/* Displays the uploaded image for the user */}
                         <input
                             type="text"
                             value={song.notes}
                             onChange={(e) => setSong({ ...song, notes: e.target.value })}
                             placeholder="Notes"
                         />
-                        {/* <button type="submit" className='create-button'>Create</button> */}
+                        <button type="submit" className='create-button'>Create</button>
                     </form>
                     {message && <p>{message}</p>}
                 </div>
@@ -130,3 +137,4 @@ const AddSong = () => {
 };
 
 export default AddSong;
+
