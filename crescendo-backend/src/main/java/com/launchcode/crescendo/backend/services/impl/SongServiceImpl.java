@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+//service implementation holds the logic to handle the database interactions
 @Service
 public class SongServiceImpl implements SongService {
 

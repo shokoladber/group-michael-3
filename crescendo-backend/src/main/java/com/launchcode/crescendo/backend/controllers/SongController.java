@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@RestController //handling the incoming requests to a web application's RESTful API
 @RequestMapping("api/songs")
 @CrossOrigin(origins = "http://localhost:3000") // Allows requests from localhost:3000
 
@@ -25,7 +25,7 @@ public class SongController {
     //Create a new song
     @PostMapping("/add")
     public Song createSong(@RequestBody Song song) {
-       return songService.createSong(song);//used when search feature is added
+       return songService.createSong(song);
     }
 
     //Get a list of all the songs
