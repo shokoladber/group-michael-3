@@ -32,7 +32,7 @@ const AddSong = () => {
 
             if (response.ok) {
                 setMessage('New Song Added');
-                navigate('/SongTable'); // Navigate to the list of songs page
+                navigate('/Dashboard'); // Navigate to the list of songs page
                 setSong({ title: '', musician: '', notes: '', spotifyTrackId:'' }); // Clear the form fields after successful addition
             } else {
                 setMessage('Failed to add song');
@@ -120,7 +120,7 @@ const AddSong = () => {
                             onChange={(e) => setSong({ ...song, notes: e.target.value })}
                             placeholder="Notes"
                         />
-                        <button type="submit" className='create-button'>Create</button>
+                        {/* <button type="submit" className='create-button'>Create</button> */}
                     </form>
                     {message && <p>{message}</p>}
                 </div>
