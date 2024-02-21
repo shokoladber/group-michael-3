@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useDropzone } from 'react-dropzone'; // Import the useDropzone hook
 import '../styles/AddSong.css';
 import '../images/EmptyStage.jpg';
 
@@ -11,6 +12,36 @@ const AddSong = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [message, setMessage] = useState('');
     const [uploadedImage, setUploadedImage] = useState(null); // Holds the URL of the uploaded image
+
+    const onDrop = (acceptedFiles) => {
+        const file = acceptedFiles[0];
+        setSong({ ...song, file });
+
+        const imageUrl = URL.createObjectURL(file);
+        setUploadedImage(imageUrl);
+
+        console.log('Uploaded image URL:', imageUrl); // Log the imageUrl to the console
+    };
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop }); // Use the useDropzone hook
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            // Check if the file type is allowed
+            const allowedTypes = ['image/jpeg', 'image/png'];
+            if (allowedTypes.includes(file.type)) {
+                setSong({ ...song, file }); // Stores the uploaded file
+    
+                // Create a URL for the uploaded image to display a preview for the user
+                const imageUrl = URL.createObjectURL(file);
+                setUploadedImage(imageUrl);
+            } else {
+                alert('Please upload a JPG or PNG file.'); // Alert the user if the file type is not allowed
+            }
+        }
+    };
+    
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -33,7 +64,7 @@ const AddSong = () => {
             if (response.ok) {
                 setMessage('New Song Added');
                 navigate('/Dashboard');
-                setSong({ title: '', musician: '', notes: '', spotifyTrackId:'' });
+                setSong({ title: '', musician: '', notes: '', spotifyTrackId: '' });
             } else {
                 setMessage('Failed to add song');
             }
@@ -41,15 +72,6 @@ const AddSong = () => {
             console.error('Error adding song:', error);
             setMessage('Failed to add song');
         }
-    };
-
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        setSong({ ...song, file }); // Stores the uploaded file
-
-        // Create a URL for the uploaded image to display a preview for the user
-        const imageUrl = URL.createObjectURL(file);
-        setUploadedImage(imageUrl);
     };
 
     const handleSearch = async (searchTerm) => {
@@ -84,57 +106,84 @@ const AddSong = () => {
 
     return (
         <div className="background-image-container">
-            <div className="song-container-big">
-                <div className="newSong-div">
-                    <h2>Create New Song</h2>
-                    <form className="newSongForm" onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            value={song.title}
-                            onChange={(e) => setSong({ ...song, title: e.target.value })}
-                            placeholder="Title"
-                            required
-                        />
-                        <input
-                            type="text"
-                            value={song.musician}
-                            onChange={(e) => setSong({ ...song, musician: e.target.value })}
-                            placeholder="Musician/Show"
-                            required
-                        />
-                        <input
-                            type="text"
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            placeholder="Search Spotify"
-                        />
-                        <button type="button" onClick={() => handleSearch(query)}>Search</button>
-                        <select value={song.spotifyTrackId} onChange={(e) => setSong({ ...song, spotifyTrackId: e.target.value })}>
-                            <option value="">Select Track</option>
-                            {searchResults.map(result => (
-                                <option key={result.id} value={result.spotifyTrackId}>{result.name}</option>
-                            ))}
-                        </select>
-                        <input
-                            type="file"
-                            onChange={handleFileChange}
-                            required
-                        />
-                        {uploadedImage && <img src={uploadedImage} alt="Uploaded file" />} {/* Displays the uploaded image for the user */}
-                        <input
-                            type="text"
-                            value={song.notes}
-                            onChange={(e) => setSong({ ...song, notes: e.target.value })}
-                            placeholder="Notes"
-                        />
-                        <button type="submit" className='create-button'>Create</button>
-                    </form>
-                    {message && <p>{message}</p>}
+          <div className="song-container-big">
+            <div className="newSong-div">
+              <h2>Create New Song</h2>
+              <form className="newSongForm" onSubmit={handleSubmit}>
+                <div className="input-group">
+                  <div className="input-row">
+                    <input
+                      type="text"
+                      value={song.title}
+                      onChange={(e) => setSong({ ...song, title: e.target.value })}
+                      placeholder="Title"
+                      required
+                    />
+                  </div>
+                  <div className="input-row">
+                    <input
+                      type="text"
+                      value={song.musician}
+                      onChange={(e) => setSong({ ...song, musician: e.target.value })}
+                      placeholder="Musician/Show"
+                      required
+                    />
+                  </div>
                 </div>
+                <div className="input-group">
+                  <div className="input-row">
+                    <input
+                      type="text"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      placeholder="Search Spotify"
+                    />
+                    <button type="button" onClick={() => handleSearch(query)}>Search</button>
+                  </div>
+                  <div className="input-row">
+                    <select value={song.spotifyTrackId} onChange={(e) => setSong({ ...song, spotifyTrackId: e.target.value })}>
+                      <option value="">Select Track</option>
+                      {searchResults.map(result => (
+                        <option key={result.id} value={result.spotifyTrackId}>{result.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="input-group">
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    accept=".jpg, .jpeg, .png" // Specify accepted file types
+                    required
+                  />
+                  <div {...getRootProps()} className="dropzone">
+                    <input {...getInputProps()} />
+                    {isDragActive ? (
+                      <p>Drop the files here ...</p>
+                    ) : (
+                      <p>Drag 'n' drop some files here, or click to select files</p>
+                    )}
+                  </div>
+                  {uploadedImage && <img src={uploadedImage} alt="Uploaded file" />}
+                </div>
+                <input
+                  type="text"
+                  value={song.notes}
+                  onChange={(e) => setSong({ ...song, notes: e.target.value })}
+                  placeholder="Notes"
+                />
+                <div>
+                <button type="submit" className="create-button">Create</button>
+                </div>
+              </form>
+              {message && <p>{message}</p>}
             </div>
+          </div>
         </div>
-    );
+      ); 
 };
 
 export default AddSong;
+
+
 

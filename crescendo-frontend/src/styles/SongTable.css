@@ -35,11 +35,11 @@
 }
 
 .table-container::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #007BFF;
 }
 
 .table-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: black;
 }
 
 .song-list {

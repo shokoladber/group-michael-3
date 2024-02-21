@@ -2,77 +2,101 @@
   background-image: url('../images/EmptyStage.jpg');
   background-size: cover;
   background-repeat: no-repeat;
-  height: 100vh; /* Sets the height of the container to fill the viewport */
-  /*filter: grayscale(100%); /* Converts the image to black and white */
+  height: 100vh;
 }
 
-.create-button {
-  padding: 7px 10px;
-  color: #fff;
-  background-color: #669bbc;
-  border-radius: 15px;
-  cursor: pointer;
-  margin-top: 10px;
+.create-button,
+input[type="text"],
+button,
+select {
+  font-family: Arial, sans-serif; /* Set font family for all text elements */
+  font-weight: normal; /* Set font weight to normal */
+  font-style: normal; /* Set font style to normal */
 }
 
-.custom-h2 {
-  font-size: 54px; 
-  color: #353535; /* font color */
-  font-weight: 1200;
-  margin-bottom: 50px; /* Add margin to separate from the form */  
-}
-
-.song-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; 
+.create-button{
+  color: white;
+  border-radius: 5px;
+  background-color: #007BFF;
 }
 
 .song-container-big {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Set height to fill viewport */
+  position: fixed; /* Position the container fixed */
+  top: 0;
+  left: 0;
+  width: 100%; /* Make the container full width */
+  height: 100%; /* Make the container full height */
 }
 
-.newSongForm {
-  border-radius: 15px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column; /* Align items vertically */
-  align-items: center;
+.custom-h2 {
+  font-size: 54px;
+  color: white;
+  font-weight: normal; /* Set font weight to normal */
+  margin-bottom: 50px;
 }
 
 .newSong-div {
   border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 400px; 
-  height: 300px; 
-  background-color: #f5f5f5; 
-  padding: 20px; /* Add padding to ensure content is within the box */
+  width: 450px;
+  height: 300px;
+  background-color: #f5f5f5;
+  padding: 20px;
 }
 
-/* Media queries for mobile responsiveness */
+.input-row input[type="text"],
+.input-row button,
+.input-row select,
+.input-row input[type="file"] {
+  font-family: Arial, sans-serif; /* Set font family for input elements */
+  font-weight: normal; /* Set font weight to normal */
+}
+
+.input-group {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.input-row {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.input-row input[type="text"],
+.input-row button,
+.input-row select {
+  flex: 1;
+  margin-right: 5px;
+}
+
+.input-row input[type="file"] {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.input-row:last-child {
+  margin-right: 0;
+}
+
 @media only screen and (max-width: 768px) {
   .background-image-container {
-    height: auto; /* Adjust height to fit content */
+    height: auto;
   }
 
   .custom-h2 {
-    font-size: 40px; /* Decrease font size for smaller screens */
+    font-size: 40px;
   }
 
   .newSong-div {
-    width: 90%; /* Adjust width to fit smaller screens */
+    width: 90%;
   }
 }
 
 @media only screen and (max-width: 576px) {
   .custom-h2 {
-    font-size: 30px; /* Further decrease font size for smaller screens */
+    font-size: 30px;
   }
 }
