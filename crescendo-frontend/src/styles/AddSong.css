@@ -96,13 +96,14 @@ select {
 }
 
 .image-preview-box {
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 150px;
   border: 2px dashed #ccc;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 20px auto; /* Adds a margin to center box */
+
 }
 
 .image-preview-box img {

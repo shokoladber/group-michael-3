@@ -161,7 +161,7 @@ const AddSong = () => {
                       {isDragActive ? (
                         <p>Drop the files here ...</p>
                       ) : (
-                        <p>Drag 'n' drop your sheet music file here, or click to select a file</p>
+                        <p>Drag & drop your sheet music here, or click to select a file</p>
                       )}
                     </div>
                   )}
