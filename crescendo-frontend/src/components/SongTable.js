@@ -6,15 +6,16 @@ import '../styles/SongTable.css';
 import EditLibrary from './EditLibrary'; // Import EditLibrary component
 
 const SongTable = () => {
-  const [filteredSongs, setFilteredSongs] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showListAllButton, setShowListAllButton] = useState(false);
+  const [filteredSongs, setFilteredSongs] = useState([]);//stores the list of songs by id
+  const [searchTerm, setSearchTerm] = useState('');//stores searchterm
+  const [showListAllButton, setShowListAllButton] = useState(false);//allows navigation between pages
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchSongs();
   }, []);
 
+  // Fetches songs from backend server API
   const fetchSongs = async () => {
     try {
       const response = await fetch('http://localhost:8080/api/songs/list');
@@ -30,8 +31,9 @@ const SongTable = () => {
     }
   };
 
+   // Function to search songs
   const handleSearch = async () => {
-    try {
+    try { //await axios pauses the execution of the function until a Promise is fulfilled or rejected
       const response = await axios.get(`http://localhost:8080/api/songs/search?keyword=${searchTerm}`);
       setFilteredSongs(response.data);
       setShowListAllButton(true);
@@ -40,8 +42,9 @@ const SongTable = () => {
     }
   };
 
+  // Function to create new song
   const handleAddSong = () => {
-    navigate('/addSong');
+    navigate('/addSong'); // Navigate to the add song form
   };
 
   const handleListAll = () => {

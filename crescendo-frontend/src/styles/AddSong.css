@@ -1,5 +1,5 @@
 .background-image-container {
-  background-image: url('../images/EmptyStage.jpg');
+  background-image: url('../images/orchestra-center\ stage\ \(B&W\).jpg');
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
@@ -9,54 +9,53 @@
 input[type="text"],
 button,
 select {
-  font-family: Arial, sans-serif; /* Set font family for all text elements */
-  font-weight: normal; /* Set font weight to normal */
-  font-style: normal; /* Set font style to normal */
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+  font-style: normal;
 }
 
-.create-button{
+.create-button {
   color: white;
   border-radius: 5px;
   background-color: #007BFF;
+  border: 1px solid #ccc;
+  
 }
 
 .song-container-big {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed; /* Position the container fixed */
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%; /* Make the container full width */
-  height: 100%; /* Make the container full height */
+  width: 100%;
+  height: 100%;
+  font-family: Arial, sans-serif; /* Set font family for all text inside .song-container-big */
 }
 
 .custom-h2 {
   font-size: 54px;
   color: white;
-  font-weight: normal; /* Set font weight to normal */
+  font-weight: normal;
   margin-bottom: 50px;
 }
 
 .newSong-div {
   border-radius: 15px;
   width: 450px;
-  height: 300px;
   background-color: #f5f5f5;
   padding: 20px;
 }
 
-.input-row input[type="text"],
-.input-row button,
-.input-row select,
-.input-row input[type="file"] {
-  font-family: Arial, sans-serif; /* Set font family for input elements */
-  font-weight: normal; /* Set font weight to normal */
-}
-
 .input-group {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap;  
+}
+
+.notes-input {
+  flex: 1; /* Take up remaining space */
+  margin-right: 5px; /* Adjust spacing between inputs */
 }
 
 .input-row {
@@ -72,14 +71,45 @@ select {
   margin-right: 5px;
 }
 
-.input-row input[type="file"] {
+.input-field,
+.search-button,
+.select-field {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* .input-row input[type="file"] {
   flex: 1;
   margin-right: 10px;
-}
+} */
 
 .input-row:last-child {
   margin-right: 0;
 }
+
+.uploaded-image {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  margin: auto;
+}
+
+.image-preview-box {
+  width: 200px;
+  height: 200px;
+  border: 2px dashed #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto; /* Adds a margin to center box */
+}
+
+.image-preview-box img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 
 @media only screen and (max-width: 768px) {
   .background-image-container {

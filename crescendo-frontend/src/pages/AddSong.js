@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone'; // Import the useDropzone hook
 import '../styles/AddSong.css';
-import '../images/EmptyStage.jpg';
+import '../images/orchestra-center stage (B&W).jpg';
 
 const AddSong = () => {
     const navigate = useNavigate();
@@ -29,7 +29,7 @@ const AddSong = () => {
         const file = event.target.files[0];
         if (file) {
             // Check if the file type is allowed
-            const allowedTypes = ['image/jpeg', 'image/png'];
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
             if (allowedTypes.includes(file.type)) {
                 setSong({ ...song, file }); // Stores the uploaded file
     
@@ -37,7 +37,7 @@ const AddSong = () => {
                 const imageUrl = URL.createObjectURL(file);
                 setUploadedImage(imageUrl);
             } else {
-                alert('Please upload a JPG or PNG file.'); // Alert the user if the file type is not allowed
+                alert('Please upload a JPEG, JPG or PNG file.'); // Alert the user if the file type is not allowed
             }
         }
     };
@@ -105,83 +105,90 @@ const AddSong = () => {
     };
 
     return (
-        <div className="background-image-container">
-          <div className="song-container-big">
-            <div className="newSong-div">
-              <h2>Create New Song</h2>
-              <form className="newSongForm" onSubmit={handleSubmit}>
-                <div className="input-group">
-                  <div className="input-row">
-                    <input
-                      type="text"
-                      value={song.title}
-                      onChange={(e) => setSong({ ...song, title: e.target.value })}
-                      placeholder="Title"
-                      required
-                    />
-                  </div>
-                  <div className="input-row">
-                    <input
-                      type="text"
-                      value={song.musician}
-                      onChange={(e) => setSong({ ...song, musician: e.target.value })}
-                      placeholder="Musician/Show"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="input-group">
-                  <div className="input-row">
-                    <input
-                      type="text"
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                      placeholder="Search Spotify"
-                    />
-                    <button type="button" onClick={() => handleSearch(query)}>Search</button>
-                  </div>
-                  <div className="input-row">
-                    <select value={song.spotifyTrackId} onChange={(e) => setSong({ ...song, spotifyTrackId: e.target.value })}>
-                      <option value="">Select Track</option>
-                      {searchResults.map(result => (
-                        <option key={result.id} value={result.spotifyTrackId}>{result.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="input-group">
+      <div className="background-image-container">
+        <div className="song-container-big">
+          <div className="newSong-div">
+            <h2>Create New Song</h2>
+            <form className="newSongForm" onSubmit={handleSubmit}>
+              <div className="input-group">
+                <div className="input-row">
                   <input
-                    type="file"
-                    onChange={handleFileChange}
-                    accept=".jpg, .jpeg, .png" // Specify accepted file types
+                    type="text"
+                    value={song.title}
+                    onChange={(e) => setSong({ ...song, title: e.target.value })}
+                    placeholder="Title"
                     required
+                    className="input-field"
                   />
-                  <div {...getRootProps()} className="dropzone">
-                    <input {...getInputProps()} />
-                    {isDragActive ? (
-                      <p>Drop the files here ...</p>
-                    ) : (
-                      <p>Drag 'n' drop some files here, or click to select files</p>
-                    )}
-                  </div>
-                  {uploadedImage && <img src={uploadedImage} alt="Uploaded file" />}
                 </div>
+                <div className="input-row">
+                  <input
+                    type="text"
+                    value={song.musician}
+                    onChange={(e) => setSong({ ...song, musician: e.target.value })}
+                    placeholder="Musician/Show"
+                    required
+                    className="input-field"
+                  />
+                </div>
+              </div>
+              <div className="input-group">
+                <div className="input-row">
+                  <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search Spotify"
+                    className="input-field"
+                  />
+                  <button type="button" onClick={() => handleSearch(query)} className="search-button">Search</button>
+                </div>
+                <div className="input-row">
+                  <select value={song.spotifyTrackId} onChange={(e) => setSong({ ...song, spotifyTrackId: e.target.value })} className="select-field">
+                    <option value="">Select Track</option>
+                    {searchResults.map(result => (
+                      <option key={result.id} value={result.spotifyTrackId}>{result.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="input-group">
+                <div className="image-preview-box">
+                  {/* Dropzone text will appear when no image is uploaded */}
+                  {!uploadedImage && (
+                    <div className="dropzone" {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      {isDragActive ? (
+                        <p>Drop the files here ...</p>
+                      ) : (
+                        <p>Drag 'n' drop your sheet music file here, or click to select a file</p>
+                      )}
+                    </div>
+                  )}
+                  {/* Uploaded image appears */}
+                  {uploadedImage && (
+                    <img src={uploadedImage} alt="Uploaded file" className="uploaded-image" />
+                  )}
+                </div>
+              </div>
+              <div className="input-group">
                 <input
                   type="text"
                   value={song.notes}
                   onChange={(e) => setSong({ ...song, notes: e.target.value })}
                   placeholder="Notes"
+                  className="input-field notes-input"
                 />
-                <div>
                 <button type="submit" className="create-button">Create</button>
-                </div>
-              </form>
-              {message && <p>{message}</p>}
-            </div>
+              </div>
+            </form>
+            {message && <p>{message}</p>}
           </div>
         </div>
-      ); 
-};
+      </div>
+    );
+    
+};    
 
 export default AddSong;
 
