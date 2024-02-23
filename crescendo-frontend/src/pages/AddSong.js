@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone'; // Import the useDropzone hook
 import '../styles/AddSong.css';
 import '../images/orchestra-center stage (B&W).jpg';
 
+
 const AddSong = () => {
     const navigate = useNavigate();
     const [song, setSong] = useState({ title: '', musician: '', notes: '', spotifyTrackId: '', file: null });

@@ -19,7 +19,11 @@ select {
   border-radius: 5px;
   background-color: #007BFF;
   border: 1px solid #ccc;
-  
+   
+}
+
+.create-button:hover {
+  background-color: black; 
 }
 
 .song-container-big {
