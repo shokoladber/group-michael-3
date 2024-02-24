@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@RestController //handling the incoming requests to a web application's RESTful API
 @RequestMapping("api/songs")
 @CrossOrigin(origins = "http://localhost:3000") // Allows requests from localhost:3000
 
@@ -58,6 +58,7 @@ public class SongController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
+
     }
 
 

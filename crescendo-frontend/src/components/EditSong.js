@@ -63,7 +63,7 @@ const EditSong = () => {
 
   const handleSearch = async () => {
     try {
-      const accessToken = 'BQBfs-Go2pIWQvdm-be5Uk-0cknL3W5jA8WUcquPX33MgWG8NSHMaNsRQqDpwXYQIj0BMCIw478tuWOkP5FOzMqbVaXm02klPdjDJzreGRHxgew0_VFPOWsL1KBhhkdzkDlW1nh1ITVJaypt3DEIMO5N3e_mogVbpTvE5JOxO9Dxyy0qDc50mSiKvXh0TIOF6eIct6AaNUY-Ch295HmJixXk0FCP13USzS5nJ40GNrDhhVjn-yifrkrGEw'; // Replace with your Spotify access token
+      const accessToken = 'BQDxto2vruoVqZPca7za9Our5QGxJjnfmvqsjaik3wmVOBjQNUPLC4Q2PyaQ17YBn5rb8I-AOw7bSbMMSrNRh9lj0ntz3uGfdNu0lUj8KtNzMRLTWDxlGGLYT2AriON8mW-ODAkNbfDzpgzYO1yAAm51XWEstDIS6u6BGDkzg2QPsi3iV37TQ2PjWbWGR-2jaHFj1OzEpSHIJxD14lyOEUCKO4x26-f5Er7EGEAdpFP8EhmqSbthZCG7Fw'; // Replace with your Spotify access token
       const encodedSearchTerm = encodeURIComponent(query);
       const response = await axios.get('https://api.spotify.com/v1/search', {
         params: {
