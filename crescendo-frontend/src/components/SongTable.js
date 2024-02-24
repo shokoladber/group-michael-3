@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import '../styles/SongTable.css';
-import EditLibrary from './EditLibrary'; // Import EditLibrary component
+// import EditLibrary from './EditLibrary';
 
 const SongTable = () => {
   const [filteredSongs, setFilteredSongs] = useState([]);
@@ -82,12 +82,12 @@ const SongTable = () => {
               <th>Title</th>
               <th>Musician/Show</th>
               <th>Notes</th>
-              <th>Listen on Spotify</th> {/* Added a new column for Spotify link */}
+              <th>Listen on Spotify</th>
             </tr>
           </thead>
           <tbody>
             {filteredSongs.map(song => (
-              <tr key={song.id}>
+              <tr key={song.id} onClick={() => navigate(`/song/${song.id}`)} style={{ cursor: 'pointer' }}>
                 <td>{song.title}</td>
                 <td>{song.musician}</td>
                 <td>{song.notes}</td>

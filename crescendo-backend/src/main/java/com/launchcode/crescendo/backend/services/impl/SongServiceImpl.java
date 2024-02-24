@@ -6,6 +6,10 @@ import com.launchcode.crescendo.backend.services.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+
+import java.util.Optional;
 
 import java.util.List;
 
@@ -33,6 +37,25 @@ public class SongServiceImpl implements SongService {
     @Override
     public List<Song> getAllSongs(){
         return songRepository.findAll(Sort.by(Sort.Direction.DESC));
+    }
+
+    @Override
+    public Optional<Song> findById(Integer id) {
+    return songRepository.findById(id);
+    }
+
+
+
+
+
+
+
+
+    @Override
+    public Song createSongWithImage(Song song, MultipartFile imageFile) throws IOException {
+        byte[] imageBytes = imageFile.getBytes();
+        song.setImage(imageBytes);
+        return songRepository.save(song);
     }
 
 }

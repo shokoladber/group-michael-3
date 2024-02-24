@@ -10,9 +10,9 @@ import org.springframework.boot.autoconfigure.web.WebProperties;
 @Table(name="songs")//annotation is used to provide the details of the table that this entity will be mapped to
 public class Song {
     @Id //This is a primary key
-    @GeneratedValue //Allows database to generate the values of our primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //Allows database to generate the values of our primary key
     @Column(name= "id")//annotation is used to define the properties of the column that will be mapped to the annotated field
-    private int id;
+    private Integer id;
 
     @NotBlank(message = "Title is required")
     @Size(min = 3, max = 50, message = "Title must be between 3 and 50 characters")
@@ -27,10 +27,35 @@ public class Song {
     @Size(max = 500, message = "Notes too long! Must be at least 500 characters.")
     private String notes;
 
+
+    @Lob
+    @Column(name = "image", columnDefinition = "LONGBLOB")
+    private byte[] image;
+
     public Song(String title, String musician, String notes) {
         this.title = title;
         this.musician = musician;
         this.notes = notes;
+    }
+
+
+    public byte[] getImage() {
+        return image;
+    }
+
+
+    private String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public void setImage(byte[] imageBytes) {
+        this.image = imageBytes;
     }
     public Song() {}
 

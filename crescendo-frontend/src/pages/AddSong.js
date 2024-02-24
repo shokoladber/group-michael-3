@@ -24,10 +24,8 @@ const AddSong = () => {
 
             const response = await fetch('http://localhost:8080/api/songs/add', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(song),
+                // body: JSON.stringify(song),
+                body: formData,
             });
 
             if (response.ok) {
@@ -109,6 +107,7 @@ const AddSong = () => {
                                 <option key={result.id} value={result.spotifyTrackId}>{result.name}</option>
                             ))}
                         </select>
+                        <p>Only JPG files are fully supported.</p>
                         <input
                             type="file"
                             onChange={handleFileChange}

@@ -12,6 +12,7 @@ import NavBar from './NavBar';
 import { AuthProvider } from './AuthContext';
 import EditLibrary from './components/EditLibrary';
 import EditSong from './components/EditSong';
+import SongDetails from './SongDetails';
 
 
 
@@ -31,6 +32,7 @@ function App() {
           <Route path='/AddSong' element={<AddSong />} />
           <Route path='/EditLibrary' element={<EditLibrary/>}/>
           <Route path={`/editSong/:id`} element={<EditSong />} />
+          <Route path='/song/:id' element={<SongDetails />} />
         </Routes>
         </AuthProvider>
       </div>
