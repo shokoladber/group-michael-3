@@ -56,10 +56,8 @@ const AddSong = () => {
 
             const response = await fetch('http://localhost:8080/api/songs/add', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(song),
+                // body: JSON.stringify(song),
+                body: formData,
             });
 
             if (response.ok) {
@@ -106,43 +104,53 @@ const AddSong = () => {
     };
 
     return (
-      <div className="background-image-container">
-        <div className="song-container-big">
-          <div className="newSong-div">
-            <h2>Create New Song</h2>
-            <form className="newSongForm" onSubmit={handleSubmit}>
-              <div className="input-group">
-                <div className="input-row">
-                  <input
-                    type="text"
-                    value={song.title}
-                    onChange={(e) => setSong({ ...song, title: e.target.value })}
-                    placeholder="Title"
-                    required
-                    className="input-field"
-                  />
-                </div>
-                <div className="input-row">
-                  <input
-                    type="text"
-                    value={song.musician}
-                    onChange={(e) => setSong({ ...song, musician: e.target.value })}
-                    placeholder="Musician/Show"
-                    required
-                    className="input-field"
-                  />
-                </div>
-              </div>
-              <div className="input-group">
-                <div className="input-row">
-                  <input
-                    type="text"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search Spotify"
-                    className="input-field"
-                  />
-                  <button type="button" onClick={() => handleSearch(query)} className="search-button">Search</button>
+        <div className="background-image-container">
+            <div className="song-container-big">
+                <div className="newSong-div">
+                    <h2>Create New Song</h2>
+                    <form className="newSongForm" onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            value={song.title}
+                            onChange={(e) => setSong({ ...song, title: e.target.value })}
+                            placeholder="Title"
+                            required
+                        />
+                        <input
+                            type="text"
+                            value={song.musician}
+                            onChange={(e) => setSong({ ...song, musician: e.target.value })}
+                            placeholder="Musician/Show"
+                            required
+                        />
+                        <input
+                            type="text"
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            placeholder="Search Spotify"
+                        />
+                        <button type="button" onClick={() => handleSearch(query)}>Search</button>
+                        <select value={song.spotifyTrackId} onChange={(e) => setSong({ ...song, spotifyTrackId: e.target.value })}>
+                            <option value="">Select Track</option>
+                            {searchResults.map(result => (
+                                <option key={result.id} value={result.spotifyTrackId}>{result.name}</option>
+                            ))}
+                        </select>
+                        <p>Only JPG files are fully supported.</p>
+                        <input
+                            type="file"
+                            onChange={handleFileChange}
+                            required
+                        />
+                        <input
+                            type="text"
+                            value={song.notes}
+                            onChange={(e) => setSong({ ...song, notes: e.target.value })}
+                            placeholder="Notes"
+                        />
+                        <button type="submit" className='create-button'>Create</button>
+                    </form>
+                    {message && <p>{message}</p>}
                 </div>
                 <div className="input-row">
                   <select value={song.spotifyTrackId} onChange={(e) => setSong({ ...song, spotifyTrackId: e.target.value })} className="select-field">
