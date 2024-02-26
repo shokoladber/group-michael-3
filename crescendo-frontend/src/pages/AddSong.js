@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useDropzone } from 'react-dropzone'; // Import the useDropzone hook
 import '../styles/AddSong.css';
-import '../images/orchestra-center stage (B&W).jpg';
-
+import '../images/EmptyStage.jpg';
 
 const AddSong = () => {
     const navigate = useNavigate();
@@ -12,41 +10,11 @@ const AddSong = () => {
     const [query, setQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [message, setMessage] = useState('');
-    const [uploadedImage, setUploadedImage] = useState(null); // Holds the URL of the uploaded image
-
-    const onDrop = (acceptedFiles) => {
-        const file = acceptedFiles[0];
-        setSong({ ...song, file });
-
-        const imageUrl = URL.createObjectURL(file);
-        setUploadedImage(imageUrl);
-
-        console.log('Uploaded image URL:', imageUrl); // Log the imageUrl to the console
-    };
-
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop }); // Use the useDropzone hook
-
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            // Check if the file type is allowed
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-            if (allowedTypes.includes(file.type)) {
-                setSong({ ...song, file }); // Stores the uploaded file
-    
-                // Create a URL for the uploaded image to display a preview for the user
-                const imageUrl = URL.createObjectURL(file);
-                setUploadedImage(imageUrl);
-            } else {
-                alert('Please upload a JPEG, JPG or PNG file.'); // Alert the user if the file type is not allowed
-            }
-        }
-    };
-    
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
+            // Submit form data including the file
             const formData = new FormData();
             formData.append('title', song.title);
             formData.append('musician', song.musician);
@@ -62,8 +30,8 @@ const AddSong = () => {
 
             if (response.ok) {
                 setMessage('New Song Added');
-                navigate('/Dashboard');
-                setSong({ title: '', musician: '', notes: '', spotifyTrackId: '' });
+                navigate('/SongTable'); // Navigate to the list of songs page
+                setSong({ title: '', musician: '', notes: '', spotifyTrackId:'' }); // Clear the form fields after successful addition
             } else {
                 setMessage('Failed to add song');
             }
@@ -72,24 +40,27 @@ const AddSong = () => {
             setMessage('Failed to add song');
         }
     };
+    const handleFileChange = (event) => {
+        setSong({ ...song, file: event.target.files[0] });
+    };
 
     const handleSearch = async (searchTerm) => {
         try {
-            const accessToken = 'YOUR_ACCESS_TOKEN';
-            const encodedSearchTerm = encodeURIComponent(searchTerm);
+            const accessToken = 'BQBfs-Go2pIWQvdm-be5Uk-0cknL3W5jA8WUcquPX33MgWG8NSHMaNsRQqDpwXYQIj0BMCIw478tuWOkP5FOzMqbVaXm02klPdjDJzreGRHxgew0_VFPOWsL1KBhhkdzkDlW1nh1ITVJaypt3DEIMO5N3e_mogVbpTvE5JOxO9Dxyy0qDc50mSiKvXh0TIOF6eIct6AaNUY-Ch295HmJixXk0FCP13USzS5nJ40GNrDhhVjn-yifrkrGEw';
+            const encodedSearchTerm = encodeURIComponent(searchTerm); // Encode the search term
             const response = await axios.get('https://api.spotify.com/v1/search', {
                 params: {
-                    q: encodedSearchTerm,
+                    q: encodedSearchTerm, // Use the encoded search term
                     type: 'track'
                 },
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
             });
-
+    
             const searchResults = response.data.tracks.items.map(item => ({
                 id: item.id,
-                name: `${item.name} - ${item.artists.map(artist => artist.name).join(', ')}`,
+                name: `${item.name} - ${item.artists.map(artist => artist.name).join(', ')}`, // Concatenate track name and artists
                 spotifyTrackId: item.id
             }));
 
@@ -152,54 +123,12 @@ const AddSong = () => {
                     </form>
                     {message && <p>{message}</p>}
                 </div>
-                <div className="input-row">
-                  <select value={song.spotifyTrackId} onChange={(e) => setSong({ ...song, spotifyTrackId: e.target.value })} className="select-field">
-                    <option value="">Select Track</option>
-                    {searchResults.map(result => (
-                      <option key={result.id} value={result.spotifyTrackId}>{result.name}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="input-group">
-                <div className="image-preview-box">
-                  {/* Dropzone text will appear when no image is uploaded */}
-                  {!uploadedImage && (
-                    <div className="dropzone" {...getRootProps()}>
-                      <input {...getInputProps()} />
-                      {isDragActive ? (
-                        <p>Drop the files here ...</p>
-                      ) : (
-                        <p>Drag & drop your sheet music here, or click to select a file</p>
-                      )}
-                    </div>
-                  )}
-                  {/* Uploaded image appears */}
-                  {uploadedImage && (
-                    <img src={uploadedImage} alt="Uploaded file" className="uploaded-image" />
-                  )}
-                </div>
-              </div>
-              <div className="input-group">
-                <input
-                  type="text"
-                  value={song.notes}
-                  onChange={(e) => setSong({ ...song, notes: e.target.value })}
-                  placeholder="Notes"
-                  className="input-field notes-input"
-                />
-                <button type="submit" className="create-button">Create</button>
-              </div>
-            </form>
-            {message && <p>{message}</p>}
-          </div>
+            </div>
+            console.log("hello");
         </div>
-      </div>
     );
+
     
-};    
+};
 
 export default AddSong;
-
-
-
