@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
-@RestController //handling the incoming requests to a web application's RESTful API
+@RestController
 @RequestMapping("api/songs")
 @CrossOrigin(origins = "http://localhost:3000") // Allows requests from localhost:3000
 
@@ -29,17 +29,16 @@ public class SongController {
     @Autowired
     private ServletContext servletContext;
 
+    @Autowired
+    public SongController(SongService songService) {
+        this.songService = songService;
+    }
+
     //Create a new song
     // @PostMapping("/add")
     // public Song createSong(@RequestBody Song song) {
     //    return songService.createSong(song);//used when search feature is added
     // }
-
-    
-
-
-
-
 
 
     @PostMapping("/add")
@@ -58,16 +57,7 @@ public class SongController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
-
     }
-
-
-
-
-
-
-
-
 
 
     //Get a list of all the songs
@@ -81,6 +71,7 @@ public class SongController {
     public List<Song> searchSongs(@RequestParam String keyword) {
         return songRepository.findByTitleContaining(keyword);
     }
+
     @PutMapping("/{id}")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> updateSong(@PathVariable int id, @RequestBody Song updatedSong) {
@@ -101,6 +92,7 @@ public class SongController {
 
         return ResponseEntity.ok("Song updated successfully.");
     }
+
     @DeleteMapping("/{id}")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> deleteSong(@PathVariable int id) {
@@ -128,26 +120,43 @@ public class SongController {
 
 
     @GetMapping("/{id}/image")
-public ResponseEntity<byte[]> getSongImage(@PathVariable Integer id) {
-    Optional<Song> songOpt = songService.findById(id);
-    if (songOpt.isPresent() && songOpt.get().getImage() != null) {
-        // Get the image from the song
-        byte[] imageBytes = songOpt.get().getImage();
-        
-        // Determine the file's media type
-        String mimeType = servletContext.getMimeType(songOpt.get().getFileName()); // Ensure your Song model has a getFileName() method or similar
-        MediaType mediaType = MediaType.parseMediaType(mimeType);
-        
-        // Return the image with the dynamically determined media type
-        return ResponseEntity.ok()
-                .contentType(mediaType)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + songOpt.get().getFileName() + "\"") // Optional: Forces the browser to download the image
-                .body(imageBytes);
-    } else {
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<byte[]> getSongImage(@PathVariable Integer id) {
+        Optional<Song> songOpt = songService.findById(id);
+        if (songOpt.isPresent() && songOpt.get().getImage() != null) {
+            // Get the image from the song
+            byte[] imageBytes = songOpt.get().getImage();
+
+            // Determine the file's media type
+            String mimeType = servletContext.getMimeType(songOpt.get().getFileName()); // Ensure your Song model has a getFileName() method or similar
+            MediaType mediaType = MediaType.parseMediaType(mimeType);
+
+            // Return the image with the dynamically determined media type
+            return ResponseEntity.ok()
+                    .contentType(mediaType)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + songOpt.get().getFileName() + "\"") // Optional: Forces the browser to download the image
+                    .body(imageBytes);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
-}
-    
+
+
+
+    @GetMapping("/favorites")
+    public ResponseEntity<List<Song>> getFavoriteSongs() {
+        List<Song> favoriteSongs = songService.getFavoriteSongs();
+        return ResponseEntity.ok(favoriteSongs);
+    }
+
+
+    @PutMapping("/{id}/favorite")
+    public ResponseEntity<?> toggleFavorite(@PathVariable Integer id) {
+        return songService.findById(id).map(song -> {
+            song.setFavorite(!song.isFavorite());
+            songService.save(song);
+            return ResponseEntity.ok().build();
+        }).orElse(ResponseEntity.notFound().build());
+    }
 
 
 }

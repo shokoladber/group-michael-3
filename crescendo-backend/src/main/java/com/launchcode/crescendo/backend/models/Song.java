@@ -32,10 +32,20 @@ public class Song {
     @Column(name = "image", columnDefinition = "LONGBLOB")
     private byte[] image;
 
+    private boolean favorite;
+
     public Song(String title, String musician, String notes) {
         this.title = title;
         this.musician = musician;
         this.notes = notes;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
 

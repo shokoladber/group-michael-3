@@ -26,8 +26,10 @@ public interface SongRepository extends JpaRepository<Song, Integer> {
 //            "musician LIKE CONCAT('%',:query, '%')", nativeQuery = true)
 //    List<Song> searchSongsSQL(String query);
 
-   // List<Song>findByTitle(String title); //where title like "%?%"
+    // List<Song>findByTitle(String title); //where title like "%?%"
     List<Song> findByTitleContaining(String keyword);
     Optional<Song> findById(long id);
+
+    List<Song> findByFavoriteTrue();
 }
 
