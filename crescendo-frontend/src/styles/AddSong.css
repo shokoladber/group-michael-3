@@ -1,78 +1,98 @@
 .background-image-container {
-  background-image: url('../images/EmptyStage.jpg');
+  background-image: url('../images/orchestra-center stage (B&W).jpg');
   background-size: cover;
   background-repeat: no-repeat;
-  height: 100vh; /* Sets the height of the container to fill the viewport */
-  /*filter: grayscale(100%); /* Converts the image to black and white */
+  height: 100vh;
 }
 
 .create-button {
-  padding: 7px 10px;
-  color: #fff;
-  background-color: #669bbc;
-  border-radius: 15px;
-  cursor: pointer;
-  margin-top: 10px;
+  color: white;
+  border-radius: 5px;
+  background-color: #007BFF;
+  border: 1px solid #ccc;
 }
 
-.custom-h2 {
-  font-size: 54px; 
-  color: #353535; /* font color */
-  font-weight: 1200;
-  margin-bottom: 50px; /* Add margin to separate from the form */  
-}
-
-.song-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; 
+.create-button:hover {
+  background-color: black; 
 }
 
 .song-container-big {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Set height to fill viewport */
-}
-
-.newSongForm {
-  border-radius: 15px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column; /* Align items vertically */
-  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-family: Arial, sans-serif; /* Set font family for all text inside .song-container-big */
 }
 
 .newSong-div {
   border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 400px; 
-  height: 300px; 
-  background-color: #f5f5f5; 
-  padding: 20px; /* Add padding to ensure content is within the box */
+  width: 450px;
+  background-color: #f5f5f5;
+  padding: 20px;
+  position: relative; /* Add position relative to make absolute positioning work */
 }
 
-/* Media queries for mobile responsiveness */
+.input-field {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.input-field input[type="text"],
+.input-field button,
+.input-field select {
+  width: 100%;
+}
+
+.input-field:last-child {
+  margin-bottom: 0;
+}
+
+.image-preview-box {
+  width: 200px;
+  height: 200px;
+  border: 2px dashed black; /* Make the border color consistent for both image preview and dropzone */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto;
+  position: relative; /* Add position relative for absolute positioning */
+  overflow: hidden; /* Hide overflow to prevent the dropzone from overflowing */
+}
+
+.image-preview-box img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure the image covers the entire area */
+}
+
+.dropzone {
+  position: absolute; /* Position the dropzone inside the preview box */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+}
+
+.dropzone.active {
+  border-color: #007BFF;
+}
+
 @media only screen and (max-width: 768px) {
   .background-image-container {
-    height: auto; /* Adjust height to fit content */
-  }
-
-  .custom-h2 {
-    font-size: 40px; /* Decrease font size for smaller screens */
+    height: auto;
   }
 
   .newSong-div {
-    width: 90%; /* Adjust width to fit smaller screens */
-  }
-}
-
-@media only screen and (max-width: 576px) {
-  .custom-h2 {
-    font-size: 30px; /* Further decrease font size for smaller screens */
+    width: 90%;
   }
 }

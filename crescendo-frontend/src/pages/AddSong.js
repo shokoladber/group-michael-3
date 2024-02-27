@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDropzone } from 'react-dropzone'; // Importing Dropzone
 import axios from 'axios';
 import '../styles/AddSong.css';
 import '../images/EmptyStage.jpg';
@@ -24,7 +25,6 @@ const AddSong = () => {
 
             const response = await fetch('http://localhost:8080/api/songs/add', {
                 method: 'POST',
-                // body: JSON.stringify(song),
                 body: formData,
             });
 
@@ -40,95 +40,113 @@ const AddSong = () => {
             setMessage('Failed to add song');
         }
     };
-    const handleFileChange = (event) => {
-        setSong({ ...song, file: event.target.files[0] });
+
+    const handleFileChange = (acceptedFiles) => {
+        setSong({ ...song, file: acceptedFiles[0] });
     };
+
+    // Adding for dropzone
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop: handleFileChange,
+        accept: 'image/jpeg, image/png', 
+        maxFiles: 1 // limit the number of files to 1
+    });
 
     const handleSearch = async (searchTerm) => {
         try {
-            const accessToken = 'BQBfs-Go2pIWQvdm-be5Uk-0cknL3W5jA8WUcquPX33MgWG8NSHMaNsRQqDpwXYQIj0BMCIw478tuWOkP5FOzMqbVaXm02klPdjDJzreGRHxgew0_VFPOWsL1KBhhkdzkDlW1nh1ITVJaypt3DEIMO5N3e_mogVbpTvE5JOxO9Dxyy0qDc50mSiKvXh0TIOF6eIct6AaNUY-Ch295HmJixXk0FCP13USzS5nJ40GNrDhhVjn-yifrkrGEw';
-            const encodedSearchTerm = encodeURIComponent(searchTerm); // Encode the search term
-            const response = await axios.get('https://api.spotify.com/v1/search', {
-                params: {
-                    q: encodedSearchTerm, // Use the encoded search term
-                    type: 'track'
-                },
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-    
-            const searchResults = response.data.tracks.items.map(item => ({
-                id: item.id,
-                name: `${item.name} - ${item.artists.map(artist => artist.name).join(', ')}`, // Concatenate track name and artists
-                spotifyTrackId: item.id
-            }));
-
-            setSearchResults(searchResults);
+          const accessToken = 'YOUR_ACCESS_TOKEN';
+          const encodedSearchTerm = encodeURIComponent(searchTerm);
+          const response = await axios.get('https://api.spotify.com/v1/search', {
+            params: {
+              q: encodedSearchTerm,
+              type: 'track'
+            },
+            headers: {
+              'Authorization': `Bearer ${accessToken}`
+            }
+          });
+          const searchResults = response.data.tracks.items.map(item => ({
+            id: item.id,
+            name: `${item.name} - ${item.artists.map(artist => artist.name).join(', ')}`,
+            spotifyTrackId: item.id
+          }));
+          setSearchResults(searchResults);
         } catch (error) {
-            console.error('Error searching Spotify:', error);
+          console.error('Error searching Spotify:', error);
         }
-    };
-
-    const handleSelectTrack = (spotifyTrackId) => {
+      };
+      const handleSelectTrack = (spotifyTrackId) => {
         setSong({ ...song, spotifyTrackId });
-    };
+      };
+    
 
     return (
-        <div className="background-image-container">
+        <div className="background-image-container containerForSongTable">
             <div className="song-container-big">
                 <div className="newSong-div">
                     <h2>Create New Song</h2>
                     <form className="newSongForm" onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            value={song.title}
-                            onChange={(e) => setSong({ ...song, title: e.target.value })}
-                            placeholder="Title"
-                            required
-                        />
-                        <input
-                            type="text"
-                            value={song.musician}
-                            onChange={(e) => setSong({ ...song, musician: e.target.value })}
-                            placeholder="Musician/Show"
-                            required
-                        />
-                        <input
-                            type="text"
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            placeholder="Search Spotify"
-                        />
-                        <button type="button" onClick={() => handleSearch(query)}>Search</button>
-                        <select value={song.spotifyTrackId} onChange={(e) => setSong({ ...song, spotifyTrackId: e.target.value })}>
-                            <option value="">Select Track</option>
-                            {searchResults.map(result => (
-                                <option key={result.id} value={result.spotifyTrackId}>{result.name}</option>
-                            ))}
-                        </select>
-                        <p>Only JPG files are fully supported.</p>
-                        <input
-                            type="file"
-                            onChange={handleFileChange}
-                            required
-                        />
-                        <input
-                            type="text"
-                            value={song.notes}
-                            onChange={(e) => setSong({ ...song, notes: e.target.value })}
-                            placeholder="Notes"
-                        />
+                        <div className="input-field">
+                            <input
+                                type="text"
+                                value={song.title}
+                                onChange={(e) => setSong({ ...song, title: e.target.value })}
+                                placeholder="Title"
+                                required
+                            />
+                        </div>
+                        <div className="input-field">
+                            <input
+                                type="text"
+                                value={song.musician}
+                                onChange={(e) => setSong({ ...song, musician: e.target.value })}
+                                placeholder="Musician/Show"
+                                required
+                            />
+                        </div>
+                        <div className="input-field">
+                            <input
+                                type="text"
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                                placeholder="Search Spotify"
+                            />
+                            <button type="button" onClick={() => handleSearch(query)}>Search</button>
+                        </div>
+                        <div className="input-field">
+                            <select value={song.spotifyTrackId} onChange={(e) => setSong({ ...song, spotifyTrackId: e.target.value })}>
+                                <option value="">Select Track</option>
+                                {searchResults.map(result => (
+                                    <option key={result.id} value={result.spotifyTrackId}>{result.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="input-field">
+                            {/* Dropzone and image preview */}
+                            <div {...getRootProps()} className={`image-preview-box ${isDragActive ? 'active' : ''}`}>
+                                <input {...getInputProps()} />
+                                {song.file ? (
+                                    <img src={URL.createObjectURL(song.file)} alt="Preview" />
+                                ) : (
+                                    <p>Drag 'n' drop an image file here, or click to select an image</p>
+                                )}
+                            </div>                           
+                        </div>
+                        <div className="input-field">
+                            <input
+                                type="text"
+                                value={song.notes}
+                                onChange={(e) => setSong({ ...song, notes: e.target.value })}
+                                placeholder="Notes"
+                            />
+                        </div>
                         <button type="submit" className='create-button'>Create</button>
                     </form>
                     {message && <p>{message}</p>}
                 </div>
             </div>
-            console.log("hello");
         </div>
     );
-
-    
 };
 
 export default AddSong;
