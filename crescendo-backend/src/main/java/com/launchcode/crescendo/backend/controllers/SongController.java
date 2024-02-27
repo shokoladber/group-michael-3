@@ -40,7 +40,6 @@ public class SongController {
     //    return songService.createSong(song);//used when search feature is added
     // }
 
-
     @PostMapping("/add")
     public ResponseEntity<Song> uploadSongWithImage(
             @RequestParam(value = "title", required = false) String title,
@@ -58,7 +57,6 @@ public class SongController {
             return ResponseEntity.badRequest().body(null);
         }
     }
-
 
     //Get a list of all the songs
     @GetMapping("/list")
