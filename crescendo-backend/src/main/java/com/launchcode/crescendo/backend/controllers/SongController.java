@@ -19,6 +19,7 @@ import java.util.Optional;
 @RequestMapping("api/songs")
 @CrossOrigin(origins = "http://localhost:3000") // Allows requests from localhost:3000
 
+//
 public class SongController {
     @Autowired
     private SongRepository songRepository;
@@ -137,8 +138,6 @@ public class SongController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 
     @GetMapping("/favorites")
     public ResponseEntity<List<Song>> getFavoriteSongs() {
