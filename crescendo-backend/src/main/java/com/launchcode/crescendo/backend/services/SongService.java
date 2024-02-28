@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-//interface class created to promote abstraction-defines the methods related to song management
+//interface class created to promote abstraction(providing the blueprint)-defines the methods related to song management
 public interface SongService {
 
 
