@@ -38,7 +38,7 @@ public class SongController {
     //Create a new song
     // @PostMapping("/add")
     // public Song createSong(@RequestBody Song song) {
-    //    return songService.createSong(song);//used when search feature is added
+    //    return songService.createSong(song);//used when frontend was added
     // }
 
     @PostMapping("/add")
