@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDropzone } from 'react-dropzone'; // Importing Dropzone
+import React, { useState } from 'react'; //useState returns 2 values -the current state & a function to update that value
+import { useNavigate } from 'react-router-dom'; //allows navigation between pages
+import { useDropzone } from 'react-dropzone'; // Importing Dropzone 'npm install --save react-dropzone'
 import axios from 'axios';
 import '../styles/AddSong.css';
 import '../images/EmptyStage.jpg';
 
+//function to add song
 const AddSong = () => {
     const navigate = useNavigate();
     const [song, setSong] = useState({ title: '', musician: '', notes: '', spotifyTrackId: '', file: null });
@@ -15,22 +16,27 @@ const AddSong = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            // Submit form data including the file
+            // Submit form data including the file (allows user to prepare the form)
             const formData = new FormData();
             formData.append('title', song.title);
-            formData.append('musician', song.musician);
+            formData.append('musician', song.musician);             //formData.append added when multipart file data was added(needed for formData)
             formData.append('notes', song.notes);
             formData.append('spotifyTrackId', song.spotifyTrackId);
             formData.append('file', song.file);
 
+            // sending the data to the server
             const response = await fetch('http://localhost:8080/api/songs/add', {
                 method: 'POST',
-                body: formData,
+                // headers: {
+                //     'Content-Type': 'application/json',
+                // },
+                // body: JSON.stringify(song),
+                body: formData, //used when sending data files(data is sent resembling a key/value pair)
             });
 
             if (response.ok) {
                 setMessage('New Song Added');
-                navigate('/SongTable'); // Navigate to the list of songs page
+                navigate('/SongTable'); // sends new song to the list of songs page
                 setSong({ title: '', musician: '', notes: '', spotifyTrackId:'' }); // Clear the form fields after successful addition
             } else {
                 setMessage('Failed to add song');
@@ -40,12 +46,12 @@ const AddSong = () => {
             setMessage('Failed to add song');
         }
     };
-
+    // updates the song state (i.e. called when a file is selected or dropped into dropzone)
     const handleFileChange = (acceptedFiles) => {
         setSong({ ...song, file: acceptedFiles[0] });
     };
 
-    // Adding for dropzone
+    // function for adding a dropzone
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop: handleFileChange,
         accept: 'image/jpeg, image/png', 
