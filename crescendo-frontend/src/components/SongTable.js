@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'; //useState returns 2 values -the current state & a function to update that value
+                                                    //useEffect allows you to perform side effect functions like data fetching
+import { useNavigate } from 'react-router-dom';//allows navigation between pages
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios';
+import axios from 'axios'; //makes HTTP request
 import '../styles/SongTable.css';
 // import EditLibrary from './EditLibrary';
 
 const SongTable = () => {
-  const [filteredSongs, setFilteredSongs] = useState([]);
+  const [filteredSongs, setFilteredSongs] = useState([]); //stores the list of songs by id (initially an empty array)
   const [searchTerm, setSearchTerm] = useState('');
   const [showListAllButton, setShowListAllButton] = useState(false);
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const SongTable = () => {
     fetchSongs();
   }, []);
 
+  //function to fetch (GET) songs once new song is created; populates the filteredSongs
   const fetchSongs = async () => {
     try {
       const response = await fetch('http://localhost:8080/api/songs/list');
@@ -30,6 +32,7 @@ const SongTable = () => {
     }
   };
 
+  // function to search the list of songs sending a GET request
   const handleSearch = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/api/songs/search?keyword=${searchTerm}`);
